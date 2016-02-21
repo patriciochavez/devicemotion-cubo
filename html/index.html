@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Proyecto Motion</title>
+<style>
+.wrap {
+	perspective: 800px;
+	perspective-origin: 50% 100px;
+}
+.cube {
+	position: relative;
+	width: 200px;
+	transform-style: preserve-3d;
+}
+.cube div {
+	position:absolute;
+  	width:200px;
+  	height:200px;
+  	display:block;
+  	background:rgba(255,255,255,0.1);
+  	box-shadow:inset 0 0 30px rgba(0,0,0,0.2);
+  	font-size:20px;
+  	text-align:center;
+  	line-height:200px;
+  	color:rgba(0,0,0,0.5);
+  	font-family:sans-serif;
+  	/*transition: all 1s linear;*/
+}
+.atras {
+	transform: translateZ(-100px) rotateY(180deg);
+}
+.derecha {
+	transform: rotateY(-270deg) translateX(100px);
+	transform-origin: top right;
+}
+.izquierda {
+	transform: rotateY(270deg) translateX(-100px);
+	transform-origin: center left;
+}
+.arriba {
+	transform: rotateX(-90deg) translateY(-100px);
+	transform-origin: top center;
+}
+.abajo {
+	transform: rotateX(90deg) translateY(100px);
+	transform-origin: bottom center;
+}
+.frente {
+	transform: translateZ(100px);
+}
+/*
+@keyframes spin {
+	from { transform: rotateY(0); }
+	to { transform: rotateY(360deg); }
+}
+.cube {
+	animation: spin 15s infinite linear;
+}*/
+</style>
+</head>
+<script>
+function handleMotionEvent(event) {
+
+    var x = (event.accelerationIncludingGravity.x).toFixed(0);
+    var y = (event.accelerationIncludingGravity.y).toFixed(0);
+    var z = (event.accelerationIncludingGravity.z).toFixed(0);
+
+//    document.getElementById("aceleracion").innerHTML = "(" + x + ", " + y + ", " + z + ")";  
+}
+
+window.addEventListener("devicemotion", handleMotionEvent, true);
+
+</script>
+<body>
+<button id="marcarCero" type="button">cero</button>
+<div id="alfa"></div>
+<div id="beta"></div>
+<div id="gama"></div>
+<div class="wrap" align="center">
+	<div id="cube" class="cube">
+		<div class="frente">frente</div>
+		<div class="atras">atras</div>
+		<div class="arriba">arriba</div>
+		<div class="abajo">abajo</div>
+		<div class="derecha">izquierda</div>
+		<div class="izquierda">derecha</div>
+	</div>
+</div>
+<script>
+var rotationValue = 0;
+
+var alfa0 = 0;
+var beta0 = 0;
+var gama0 = 0;
+
+window.addEventListener("deviceorientation", function(event) {
+        document.getElementById("alfa").innerHTML = event.alpha.toFixed(1);
+        document.getElementById("beta").innerHTML = event.beta.toFixed(1);
+        document.getElementById("gama").innerHTML = event.gamma.toFixed(1);
+        rotarAlfaBetaGama(event.alpha.toFixed(1) - alfa0, event.beta.toFixed(1) - beta0, event.gamma.toFixed(1) - gama0);
+        
+}, true);
+
+function rotarAlfaBetaGama(alfa, beta, gama){
+	cube.style.webkitTransform = "rotateX("+ alfa +"deg) rotateZ("+ beta +"deg) rotateY("+ gama +"deg)";
+}
+
+marcarCero.onclick = function() {
+    alfa0 = document.getElementById("alfa").innerHTML;
+    beta0 = document.getElementById("beta").innerHTML;
+    gama0 = document.getElementById("gama").innerHTML;
+}
+
+</script>
+</body>
+</html>
